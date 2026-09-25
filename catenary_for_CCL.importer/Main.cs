@@ -47,6 +47,7 @@ public static class Main
     }
 }
 
+[editor_proxy(typeof(test_component_definition_proxy))]
 internal class test_component_definition: electric_component_defition
 {
     public int val;

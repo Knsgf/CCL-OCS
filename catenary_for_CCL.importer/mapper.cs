@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 using HarmonyLib;
 using UnityEngine;
@@ -10,8 +11,6 @@ using LocoSim.Definitions;
 
 using proxies = CCL.Types.Proxies.Ports;
 
-using catenary_for_CCL.types;
-
 namespace catenary_for_CCL.importer;
 
 internal abstract class electric_component_defition: SimComponentDefinition
@@ -19,14 +18,30 @@ internal abstract class electric_component_defition: SimComponentDefinition
     public abstract void map_from(proxies.SimComponentDefinitionProxy proxy);
 }
 
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+internal class editor_proxy(Type proxy_type): Attribute
+{
+    public Type proxy_type { get; private set; } = proxy_type;
+}
+
 [HarmonyPatch(typeof(CCL.Importer.CarManager), "LoadCarDefinitions")]
 internal static class mapper
 {
     private static readonly HashSet<TrainCarLivery> _scanned_liveries = [];
-    private static readonly Dictionary<Type, Type> _type_mapping = new()
+    private static readonly Dictionary<Type, Type> _type_mapping = [];
+
+    static mapper()
     {
-        [typeof(test_component_definition_proxy)] = typeof(test_component_definition)
-    };
+        foreach (Type current_type in Assembly.GetExecutingAssembly().GetTypes())
+        {
+            Main.log($"ITS {current_type}");
+            if (Attribute.GetCustomAttribute(current_type, typeof(editor_proxy)) is editor_proxy proxy_info)
+            { 
+                Main.log($"ITSP {proxy_info.proxy_type}"); 
+                _type_mapping[proxy_info.proxy_type] = current_type;
+            }
+        }
+    }
 
     private static void map_component(GameObject prefab, Type component_proxy_type, SimComponentDefinition[] execution_order,
         Dictionary<proxies.SimComponentDefinitionProxy, int> execution_indices)
@@ -68,7 +83,7 @@ internal static class mapper
             
             Main.log($"LVTSTP '{current_type.id}' {execution_order_proxy.Count}");
             Dictionary<proxies.SimComponentDefinitionProxy, int> execution_indices = [];
-			Dictionary<Type, Type> type_mapping = _type_mapping;
+            Dictionary<Type, Type> type_mapping = _type_mapping;
             for (int proxy_index = execution_order_proxy.Count - 1; proxy_index >= 0; --proxy_index)
             {
                 proxies.SimComponentDefinitionProxy proxy = execution_order_proxy[proxy_index];
