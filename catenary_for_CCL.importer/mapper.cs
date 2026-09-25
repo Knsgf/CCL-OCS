@@ -13,9 +13,9 @@ using proxies = CCL.Types.Proxies.Ports;
 
 namespace catenary_for_CCL.importer;
 
-internal abstract class electric_component_defition: SimComponentDefinition
+internal interface electric_component_defition
 {
-    public abstract void map_from(proxies.SimComponentDefinitionProxy proxy);
+    void map_from(proxies.SimComponentDefinitionProxy proxy);
 }
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
@@ -35,8 +35,7 @@ internal static class mapper
         foreach (Type current_type in Assembly.GetExecutingAssembly().GetTypes())
         {
             Main.log($"ITS {current_type}");
-            if (current_type.BaseType == typeof(electric_component_defition) 
-                && Attribute.GetCustomAttribute(current_type, typeof(editor_proxy)) is editor_proxy proxy_info)
+            if (Attribute.GetCustomAttribute(current_type, typeof(editor_proxy)) is editor_proxy proxy_info)
             { 
                 Main.log($"ITSP {proxy_info.proxy_type}"); 
                 _type_mapping[proxy_info.proxy_type] = current_type;
@@ -60,10 +59,11 @@ internal static class mapper
                 continue;
             GameObject entity = current_proxy.gameObject;
             var replacement = (electric_component_defition) entity.AddComponent(component_type);
+            assert.test(replacement is SimComponentDefinition);
             replacement.map_from(real_proxy);
             Main.log($"LVTSM '{real_proxy}' {executiuon_index}");
             assert.test(execution_order[executiuon_index] == null);
-            execution_order[executiuon_index] = replacement;
+            execution_order[executiuon_index] = (SimComponentDefinition) replacement;
             //GameObject.Destroy(current_proxy);
         }
     }

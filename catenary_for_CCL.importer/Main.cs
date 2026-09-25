@@ -48,13 +48,13 @@ public static class Main
 }
 
 [editor_proxy(typeof(test_component_definition_proxy))]
-internal class test_component_definition: electric_component_defition
+internal class test_component_definition: SimComponentDefinition, electric_component_defition
 {
     public int val;
     public readonly PortDefinition          counter = new(PortType.READONLY_OUT, PortValueType.GENERIC, "COUNTER");
     public readonly PortReferenceDefinition handle  = new(PortValueType.CONTROL, "HANDLE");
 
-    public override void map_from(proxies.SimComponentDefinitionProxy proxy)
+    public void map_from(proxies.SimComponentDefinitionProxy proxy)
     {
         var real_proxy = (test_component_definition_proxy) proxy;
         ID  = real_proxy.ID;
