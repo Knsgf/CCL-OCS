@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 18
+VisualStudioVersion = 18.10.12210.168
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "catenary_for_CCL.importer", "catenary_for_CCL.importer\catenary_for_CCL.importer.csproj", "{35FB73C9-194D-4B06-8327-9200CAF9BF7D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "catenary_for_CCL.types", "catenary_for_CCL.types\catenary_for_CCL.types.csproj", "{EC1256B1-CDEB-4C67-AF0A-BA50CA188E19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{35FB73C9-194D-4B06-8327-9200CAF9BF7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35FB73C9-194D-4B06-8327-9200CAF9BF7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35FB73C9-194D-4B06-8327-9200CAF9BF7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35FB73C9-194D-4B06-8327-9200CAF9BF7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC1256B1-CDEB-4C67-AF0A-BA50CA188E19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC1256B1-CDEB-4C67-AF0A-BA50CA188E19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC1256B1-CDEB-4C67-AF0A-BA50CA188E19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC1256B1-CDEB-4C67-AF0A-BA50CA188E19}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3B1B6499-8808-47DD-8552-AAFF670720F8}
+	EndGlobalSection
+EndGlobal

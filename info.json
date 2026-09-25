@@ -1,0 +1,12 @@
+{
+	"Id": "CatenaryForCCL",
+	"Version": "1.0.0",
+	"DisplayName": "Custom Car Loader Catenary Support",
+	"Author": "-",
+	"AssemblyName": "catenary_for_CCL.importer.dll",
+	"EntryMethod": "catenary_for_CCL.importer.Main.Load",
+	"ManagerVersion": "0.27.3",
+	"Requirements": [
+    		"DVCustomCarLoader"
+	]
+}
