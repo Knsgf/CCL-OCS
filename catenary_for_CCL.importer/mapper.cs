@@ -35,7 +35,8 @@ internal static class mapper
         foreach (Type current_type in Assembly.GetExecutingAssembly().GetTypes())
         {
             Main.log($"ITS {current_type}");
-            if (Attribute.GetCustomAttribute(current_type, typeof(editor_proxy)) is editor_proxy proxy_info)
+            if (current_type.BaseType == typeof(electric_component_defition) 
+                && Attribute.GetCustomAttribute(current_type, typeof(editor_proxy)) is editor_proxy proxy_info)
             { 
                 Main.log($"ITSP {proxy_info.proxy_type}"); 
                 _type_mapping[proxy_info.proxy_type] = current_type;
