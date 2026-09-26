@@ -2,19 +2,19 @@ using System;
 using System.Reflection;
 
 using HarmonyLib;
+using UnityEngine;
 using UnityModManagerNet;
 
+using DV.Simulation.Cars;
+using DV.Simulation.Controllers;
 using LocoSim.Definitions;
 using LocoSim.Implementations;
 
-using proxies = CCL.Types.Proxies.Ports;
-
 using catenary_for_CCL.types;
-
-using UnityEngine;
 
 namespace catenary_for_CCL.importer;
 
+[HarmonyPatch(typeof(SimController), "Initialize")]
 public static class Main
 {
     private static UnityModManager.ModEntry? _mod;
@@ -24,26 +24,36 @@ public static class Main
         _mod?.Logger.Log(message);
     }
     
-    private static bool Load(UnityModManager.ModEntry modEntry)
+    private static bool Load(UnityModManager.ModEntry mod)
     {
-        _mod = modEntry;
-        Harmony? patcher = null;
+        _mod = mod;
+        Harmony? injector = null;
 
         try
         {
-            patcher = new(modEntry.Info.Id);
-            patcher.PatchAll(Assembly.GetExecutingAssembly());
+            injector = new(mod.Info.Id);
+            injector.PatchAll(Assembly.GetExecutingAssembly());
 
             mapper.map_new_vehicles();
         }
         catch (Exception ex)
         {
-            modEntry.Logger.LogException($"Failed to load {modEntry.Info.DisplayName}:", ex);
-            patcher?.UnpatchAll(modEntry.Info.Id);
+            mod.Logger.LogException($"Failed to load {mod.Info.DisplayName}:", ex);
+            injector?.UnpatchAll(mod.Info.Id);
             return false;
         }
 
         return true;
+    }
+
+    private static void Prefix(SimController __instance)
+    {
+        var all_controllers = __instance.GetComponentsInChildren<ASimInitializedController>();
+        if (all_controllers != null && (__instance.otherSimControllers == null 
+            || __instance.otherSimControllers.Length != all_controllers.Length))
+        {
+            __instance.otherSimControllers = all_controllers;
+        }
     }
 }
 
