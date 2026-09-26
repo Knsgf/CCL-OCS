@@ -47,7 +47,7 @@ internal static class mapper
         Dictionary<proxies.SimComponentDefinitionProxy, int> execution_indices)
     {
         Component[]? mapped_component_proxies = prefab.GetComponentsInChildren(component_proxy_type, includeInactive: false);
-        Main.log($"LVTST '{prefab.name}' {mapped_component_proxies?.Length.ToString() ?? "<null>"}");
+        Main.log($"LVTST '{prefab.name}' <{component_proxy_type}> {mapped_component_proxies?.Length.ToString() ?? "<null>"}");
         if (mapped_component_proxies == null || mapped_component_proxies.Length == 0)
             return;
 
