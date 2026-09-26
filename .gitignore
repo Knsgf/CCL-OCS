@@ -84,7 +84,6 @@ StyleCopReport.xml
 *_p.c
 *_h.h
 *.ilk
-*.meta
 *.obj
 *.iobj
 *.pch
@@ -402,3 +401,9 @@ FodyWeavers.xsd
 package.ps1
 README.md
 repository.json
+example-project/.*
+example-project/*.sln
+/example-project/Library
+/example-project/Temp
+*.dll
+*.dll.meta
