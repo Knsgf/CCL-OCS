@@ -15,7 +15,7 @@ namespace catenary_for_CCL.importer;
 
 internal interface electric_component_defition
 {
-    void map_from(proxies.SimComponentDefinitionProxy proxy);
+    void map_from(MonoBehaviour proxy);
 }
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
@@ -54,16 +54,15 @@ internal static class mapper
         Type component_type = _type_mapping[component_proxy_type];
         foreach (Component current_proxy in mapped_component_proxies)
         {
-            var real_proxy = (proxies.SimComponentDefinitionProxy) current_proxy;
-            if (!execution_indices.TryGetValue(real_proxy, out int executiuon_index))
-                continue;
-            GameObject entity = current_proxy.gameObject;
-            var replacement = (electric_component_defition) entity.AddComponent(component_type);
-            assert.test(replacement is SimComponentDefinition);
-            replacement.map_from(real_proxy);
-            Main.log($"LVTSM '{real_proxy}' {executiuon_index}");
-            assert.test(execution_order[executiuon_index] == null);
-            execution_order[executiuon_index] = (SimComponentDefinition) replacement;
+            var replacement = (electric_component_defition) current_proxy.gameObject.AddComponent(component_type);
+            replacement.map_from((MonoBehaviour) current_proxy);
+            if (   current_proxy is proxies.SimComponentDefinitionProxy real_proxy 
+                && execution_indices.TryGetValue(real_proxy, out int executiuon_index))
+            {
+                Main.log($"LVTSM '{real_proxy}' {executiuon_index}");
+                assert.test(execution_order[executiuon_index] == null);
+                execution_order[executiuon_index] = (SimComponentDefinition) replacement;
+            }
             //GameObject.Destroy(current_proxy);
         }
     }

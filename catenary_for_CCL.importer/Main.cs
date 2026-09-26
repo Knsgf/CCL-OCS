@@ -11,6 +11,8 @@ using proxies = CCL.Types.Proxies.Ports;
 
 using catenary_for_CCL.types;
 
+using UnityEngine;
+
 namespace catenary_for_CCL.importer;
 
 public static class Main
@@ -52,7 +54,7 @@ internal class test_component_definition: SimComponentDefinition, electric_compo
     public readonly PortDefinition          counter = new(PortType.READONLY_OUT, PortValueType.GENERIC, "COUNTER");
     public readonly PortReferenceDefinition handle  = new(PortValueType.CONTROL, "HANDLE");
 
-    public void map_from(proxies.SimComponentDefinitionProxy proxy)
+    public void map_from(MonoBehaviour proxy)
     {
         var real_proxy = (test_component_definition_proxy) proxy;
         ID  = real_proxy.ID;

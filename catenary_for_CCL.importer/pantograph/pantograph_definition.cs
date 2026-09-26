@@ -1,3 +1,5 @@
+using UnityEngine;
+
 using LocoSim.Definitions;
 using LocoSim.Implementations;
 
@@ -18,7 +20,7 @@ internal class pantograph_definition: power_collector_common_ports_definition, e
 
     public readonly PortReferenceDefinition toggle = new(PortValueType.CONTROL, "TOGGLE");
 
-    public void map_from(CCL.Types.Proxies.Ports.SimComponentDefinitionProxy proxy)
+    public void map_from(MonoBehaviour proxy)
     {
         var real_proxy = (pantograph_definition_proxy) proxy;
         ID                  = real_proxy.ID;
