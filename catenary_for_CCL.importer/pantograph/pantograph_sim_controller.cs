@@ -33,21 +33,24 @@ internal class pantograph_sim_controller: ASimInitializedController, electric_co
 
     private static readonly Dictionary<TrainCar, HashSet<pantograph_sim_controller>> _all_catenary_controllers = new();
 
+    [SerializeField]
     private Transform? _pantograph_base;
+    [SerializeField]
     private Transform? _contact_strip_first_end, _contact_strip_second_end;
+    [SerializeField]
     private float      _contact_tolerance = 0.2f;
 
-    [PortId(PortType.EXTERNAL_IN, PortValueType.GENERIC, local: true)]
+    [PortId(PortType.EXTERNAL_IN, PortValueType.GENERIC, local: true), SerializeField]
     private string _initial_height_port_ID = string.Empty;
-    [PortId(PortType.EXTERNAL_IN, PortValueType.GENERIC, local: true)]
+    [PortId(PortType.EXTERNAL_IN, PortValueType.GENERIC, local: true), SerializeField]
     private string _head_height_port_ID    = string.Empty;
-    [PortId(PortType.EXTERNAL_IN, PortValueType.GENERIC, local: true)]
+    [PortId(PortType.EXTERNAL_IN, PortValueType.GENERIC, local: true), SerializeField]
     private string _wire_height_port_ID    = string.Empty;
-    [PortId(PortType.EXTERNAL_IN, PortValueType.VOLTS, local: true)]
+    [PortId(PortType.EXTERNAL_IN, PortValueType.VOLTS, local: true), SerializeField]
     private string _wire_voltage_port_ID   = string.Empty;
-    [PortId(PortType.EXTERNAL_IN, PortValueType.STATE, local: true)]
+    [PortId(PortType.EXTERNAL_IN, PortValueType.STATE, local: true), SerializeField]
     private string _is_in_contact_port_ID  = string.Empty;
-    [PortId(PortValueType.AMPS)]
+    [PortId(PortValueType.AMPS), SerializeField]
     private string _input_current_port_ID  = string.Empty;
 
     private Func<Transform, Transform, Transform, Transform, float, (float?, float)>? get_wire_height_and_voltage = null;
