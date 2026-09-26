@@ -28,7 +28,7 @@ internal class editor_proxy(Type proxy_type): Attribute
 internal static class mapper
 {
     private static readonly HashSet<TrainCarLivery> _scanned_liveries = [];
-    private static readonly Dictionary<Type, Type> _type_mapping = [];
+    private static readonly Dictionary<Type, Type>  _type_mapping     = [];
 
     static mapper()
     {
