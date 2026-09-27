@@ -5916,6 +5916,7 @@ MonoBehaviour:
   - {fileID: 4003963920674356325}
   - {fileID: 2942377580771706204}
   - {fileID: 8300633770295098592}
+  - {fileID: 7661975085888271065}
   - {fileID: 8161892729109003524}
   - {fileID: 8009042279941120359}
   - {fileID: 3486696345912907028}
@@ -6018,8 +6019,12 @@ MonoBehaviour:
     portId: busBar.SUPPLY_VOLTAGE
   - portReferenceId: compressor.VOLTAGE_NORMALIZED
     portId: busBar.SUPPLY_VOLTAGE_NORMALIZED
+  - portReferenceId: electricityMeter.CURRENT_DRAW
+    portId: chopperInputCurrentCalculator.INPUT_CURRENT
+  - portReferenceId: electricityMeter.SUPPLY_VOLTAGE
+    portId: busBar.SUPPLY_VOLTAGE
   connectionsJson: '[{"fullPortIdIn":"transmission.TORQUE_IN","fullPortIdOut":"tm.TORQUE_OUT"},{"fullPortIdIn":"traction.TORQUE_IN","fullPortIdOut":"transmission.TORQUE_OUT"}]'
-  portReferenceConnectionsJson: '[{"portId":"throttle.EXT_IN","portReferenceId":"throttleCurve.IN"},{"portId":"hornControl.CONTROL","portReferenceId":"horn.HORN_CONTROL"},{"portId":"tm.POWER_IN","portReferenceId":"powerConsumptionCalculator.POWER_CONSUMPTION_0"},{"portId":"compressor.POWER_CONSUMPTION","portReferenceId":"powerConsumptionCalculator.POWER_CONSUMPTION_1"},{"portId":"powerConsumptionCalculator.POWER_CONSUMPTION_TOTAL","portReferenceId":"chopperInputCurrentCalculator.POWER_CONSUMPTION"},{"portId":"pantographSwitch.EXT_IN","portReferenceId":"pantograph.TOGGLE"},{"portId":"sand.AMOUNT","portReferenceId":"sander.SAND"},{"portId":"sand.CONSUME_EXT_IN","portReferenceId":"sander.SAND_CONSUMPTION"},{"portId":"traction.WHEEL_RPM_EXT_IN","portReferenceId":"tmRpmCalculator.WHEEL_RPM"},{"portId":"transmission.GEAR_RATIO","portReferenceId":"tmRpmCalculator.GEAR_RATIO"},{"portId":"throttleCurve.OUT","portReferenceId":"voltageRegulator.THROTTLE"},{"portId":"tm.SINGLE_MOTOR_EFFECTIVE_RESISTANCE","portReferenceId":"voltageRegulator.SINGLE_MOTOR_EFFECTIVE_RESISTANCE"},{"portId":"throttle.EXT_IN","portReferenceId":"tm.THROTTLE"},{"portId":"reverser.REVERSER","portReferenceId":"tm.REVERSER"},{"portId":"tmRpmCalculator.TM_RPM","portReferenceId":"tm.MOTOR_RPM"},{"portId":"voltageRegulator.OUTPUT_VOLTAGE","portReferenceId":"tm.APPLIED_VOLTAGE"},{"portId":"tmHeat.TEMPERATURE","portReferenceId":"tm.TM_TEMPERATURE"},{"portId":"waterDetector.STATE_EXT_IN","portReferenceId":"tm.ENVIRONMENT_WATER_STATE"},{"portId":"tmHeat.TEMPERATURE","portReferenceId":"tmPassiveCooler.TEMPERATURE"},{"portId":"tm.HEAT_OUT","portReferenceId":"tmHeat.HEAT_IN_0"},{"portId":"tmPassiveCooler.HEAT_OUT","portReferenceId":"tmHeat.HEAT_IN_1"},{"portId":"cabLight.EXT_IN","portReferenceId":"cabLightLamp.INPUT"},{"portId":"tm.TMS_STATE","portReferenceId":"tmOfflineLamp.INPUT"},{"portId":"tmHeat.TEMPERATURE","portReferenceId":"tmOverheatLamp.INPUT"},{"portId":"sander.CONTROL_EXT_IN","portReferenceId":"sanderLamp.INPUT"},{"portId":"sand.NORMALIZED","portReferenceId":"sandLamp.INPUT"},{"portId":"headlightDecoder.FRONT_HEADLIGHTS_EXT_IN","portReferenceId":"headlightsFLamp.INPUT"},{"portId":"headlightDecoder.REAR_HEADLIGHTS_EXT_IN","portReferenceId":"headlightsRLamp.INPUT"},{"portId":"tm.AMPS_PER_TM","portReferenceId":"ampLamp.INPUT"},{"portId":"pantograph2Switch.EXT_IN","portReferenceId":"pantograph2.TOGGLE"},{"portId":"busBar.SUPPLY_VOLTAGE","portReferenceId":"chopperInputCurrentCalculator.SUPPLY_VOLTAGE"},{"portId":"chopperInputCurrentCalculator.INPUT_CURRENT","portReferenceId":"busBar.CURRENT_DRAW"},{"portId":"pantograph.PANTOGRAPH_IN_CONTACT","portReferenceId":"busBar.PANTOGRAPH_IN_CONTACT_0"},{"portId":"pantograph2.PANTOGRAPH_IN_CONTACT","portReferenceId":"busBar.PANTOGRAPH_IN_CONTACT_1"},{"portId":"pantograph.VOLTAGE","portReferenceId":"busBar.PANTOGRAPH_VOLTAGE_0"},{"portId":"pantograph2.VOLTAGE","portReferenceId":"busBar.PANTOGRAPH_VOLTAGE_1"},{"portId":"busBar.SUPPLY_VOLTAGE","portReferenceId":"voltageRegulator.SUPPLY_VOLTAGE"},{"portId":"busBar.SUPPLY_VOLTAGE_NORMALIZED","portReferenceId":"compressor.VOLTAGE_NORMALIZED"}]'
+  portReferenceConnectionsJson: '[{"portId":"throttle.EXT_IN","portReferenceId":"throttleCurve.IN"},{"portId":"hornControl.CONTROL","portReferenceId":"horn.HORN_CONTROL"},{"portId":"tm.POWER_IN","portReferenceId":"powerConsumptionCalculator.POWER_CONSUMPTION_0"},{"portId":"compressor.POWER_CONSUMPTION","portReferenceId":"powerConsumptionCalculator.POWER_CONSUMPTION_1"},{"portId":"powerConsumptionCalculator.POWER_CONSUMPTION_TOTAL","portReferenceId":"chopperInputCurrentCalculator.POWER_CONSUMPTION"},{"portId":"pantographSwitch.EXT_IN","portReferenceId":"pantograph.TOGGLE"},{"portId":"sand.AMOUNT","portReferenceId":"sander.SAND"},{"portId":"sand.CONSUME_EXT_IN","portReferenceId":"sander.SAND_CONSUMPTION"},{"portId":"traction.WHEEL_RPM_EXT_IN","portReferenceId":"tmRpmCalculator.WHEEL_RPM"},{"portId":"transmission.GEAR_RATIO","portReferenceId":"tmRpmCalculator.GEAR_RATIO"},{"portId":"throttleCurve.OUT","portReferenceId":"voltageRegulator.THROTTLE"},{"portId":"tm.SINGLE_MOTOR_EFFECTIVE_RESISTANCE","portReferenceId":"voltageRegulator.SINGLE_MOTOR_EFFECTIVE_RESISTANCE"},{"portId":"throttle.EXT_IN","portReferenceId":"tm.THROTTLE"},{"portId":"reverser.REVERSER","portReferenceId":"tm.REVERSER"},{"portId":"tmRpmCalculator.TM_RPM","portReferenceId":"tm.MOTOR_RPM"},{"portId":"voltageRegulator.OUTPUT_VOLTAGE","portReferenceId":"tm.APPLIED_VOLTAGE"},{"portId":"tmHeat.TEMPERATURE","portReferenceId":"tm.TM_TEMPERATURE"},{"portId":"waterDetector.STATE_EXT_IN","portReferenceId":"tm.ENVIRONMENT_WATER_STATE"},{"portId":"tmHeat.TEMPERATURE","portReferenceId":"tmPassiveCooler.TEMPERATURE"},{"portId":"tm.HEAT_OUT","portReferenceId":"tmHeat.HEAT_IN_0"},{"portId":"tmPassiveCooler.HEAT_OUT","portReferenceId":"tmHeat.HEAT_IN_1"},{"portId":"cabLight.EXT_IN","portReferenceId":"cabLightLamp.INPUT"},{"portId":"tm.TMS_STATE","portReferenceId":"tmOfflineLamp.INPUT"},{"portId":"tmHeat.TEMPERATURE","portReferenceId":"tmOverheatLamp.INPUT"},{"portId":"sander.CONTROL_EXT_IN","portReferenceId":"sanderLamp.INPUT"},{"portId":"sand.NORMALIZED","portReferenceId":"sandLamp.INPUT"},{"portId":"headlightDecoder.FRONT_HEADLIGHTS_EXT_IN","portReferenceId":"headlightsFLamp.INPUT"},{"portId":"headlightDecoder.REAR_HEADLIGHTS_EXT_IN","portReferenceId":"headlightsRLamp.INPUT"},{"portId":"tm.AMPS_PER_TM","portReferenceId":"ampLamp.INPUT"},{"portId":"pantograph2Switch.EXT_IN","portReferenceId":"pantograph2.TOGGLE"},{"portId":"busBar.SUPPLY_VOLTAGE","portReferenceId":"chopperInputCurrentCalculator.SUPPLY_VOLTAGE"},{"portId":"chopperInputCurrentCalculator.INPUT_CURRENT","portReferenceId":"busBar.CURRENT_DRAW"},{"portId":"pantograph.PANTOGRAPH_IN_CONTACT","portReferenceId":"busBar.PANTOGRAPH_IN_CONTACT_0"},{"portId":"pantograph2.PANTOGRAPH_IN_CONTACT","portReferenceId":"busBar.PANTOGRAPH_IN_CONTACT_1"},{"portId":"pantograph.VOLTAGE","portReferenceId":"busBar.PANTOGRAPH_VOLTAGE_0"},{"portId":"pantograph2.VOLTAGE","portReferenceId":"busBar.PANTOGRAPH_VOLTAGE_1"},{"portId":"busBar.SUPPLY_VOLTAGE","portReferenceId":"voltageRegulator.SUPPLY_VOLTAGE"},{"portId":"busBar.SUPPLY_VOLTAGE_NORMALIZED","portReferenceId":"compressor.VOLTAGE_NORMALIZED"},{"portId":"chopperInputCurrentCalculator.INPUT_CURRENT","portReferenceId":"electricityMeter.CURRENT_DRAW"},{"portId":"busBar.SUPPLY_VOLTAGE","portReferenceId":"electricityMeter.SUPPLY_VOLTAGE"}]'
 --- !u!114 &3460042016622701125
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6948,6 +6953,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5218887670375018505}
+  - component: {fileID: 7661975085888271065}
   m_Layer: 0
   m_Name: electricityMeter
   m_TagString: Untagged
@@ -6969,6 +6975,20 @@ Transform:
   m_Father: {fileID: 5672157207868484993}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7661975085888271065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3483314319526915229}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 814104321, guid: 995286d04ff91c84caf80fc0ea8b2fc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ID: electricityMeter
+  ElectricChargeConsumptionFactor: 0.6666667
 --- !u!1 &3573213361315364663
 GameObject:
   m_ObjectHideFlags: 0
