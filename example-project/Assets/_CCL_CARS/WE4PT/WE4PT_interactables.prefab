@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: -1549161656, guid: b247489fc36790c41b197410cd8386d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portId: pantograph.VOLTAGE
+  portId: busBar.SUPPLY_VOLTAGE
   indicatorRangeScalerPortId: 
   fuseId: 
   useZeroAsDefaultValue: 0
