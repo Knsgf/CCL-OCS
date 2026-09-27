@@ -87,13 +87,13 @@ public class electricity_meter: SimComponent
         _unit = TrainCar.Resolve(definition.gameObject);
         if (_unit == null)
         {
-            Main.log("Train car not found, electricity meter disabled");
+            Main.release_log("Train car not found, electricity meter disabled");
             _fee_tracker = null;
             return;
         }
         if (_cars_with_meters.ContainsKey(_unit))
         {
-            Main.log("Another electricity meter present on the car, duplicate meters disabled");
+            Main.release_log("Another electricity meter present on the car, duplicate meters disabled");
             _fee_tracker = null;
             return;
         }

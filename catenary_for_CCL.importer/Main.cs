@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
 
 using HarmonyLib;
@@ -14,7 +15,13 @@ public static class Main
 {
     private static UnityModManager.ModEntry? _mod;
     
+    [Conditional("DEBUG")]
     public static void log(string message)
+    {
+        _mod?.Logger.Log(message);
+    }
+    
+    public static void release_log(string message)
     {
         _mod?.Logger.Log(message);
     }

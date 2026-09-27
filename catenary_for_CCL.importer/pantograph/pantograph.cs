@@ -36,7 +36,7 @@ internal class pantograph: power_collector_common_ports
             return; 
         if (_head_movement_speed <= 0.0f)
         {
-            Main.log("Head movement speed negative or zero, pantograph disabled");
+            Main.release_log("Head movement speed negative or zero, pantograph disabled");
             _disabled = true;
             return;
         }
@@ -44,7 +44,7 @@ internal class pantograph: power_collector_common_ports
         //_unit    = unit;
         if (unit == null)
         {
-            Main.log("Car not resolved, pantograph disabled");
+            Main.release_log("Car not resolved, pantograph disabled");
             _disabled = true;
             return;
         }
@@ -61,7 +61,7 @@ internal class pantograph: power_collector_common_ports
         { 
             if (_maximum_raise <= initial_height)
             {
-                Main.log("Maximum reach is below initial position, pantograph disabled");
+                Main.release_log("Maximum reach is below initial position, pantograph disabled");
                 _disabled = true;
                 return;
             }

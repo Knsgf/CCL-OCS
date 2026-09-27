@@ -69,7 +69,7 @@ internal class pantograph_sim_controller: ASimInitializedController, electric_co
         _OCS_type = Type.GetType(OCS_class_name, false);
         if (_OCS_type == null)
         {
-            Main.log("Catenary not installed; overhead power will be unavailable");
+            Main.release_log("Catenary not installed; overhead power will be unavailable");
             return;
         }
         _get_wire_height_and_voltage_info = _OCS_type.GetMethod(OCS_wire_height_and_voltage_method_name, 
@@ -79,7 +79,7 @@ internal class pantograph_sim_controller: ASimInitializedController, electric_co
         EventInfo? OCSDeactivationInfo = _OCS_type.GetEvent(OCS_deactivation_event_name, BindingFlags.Public | BindingFlags.Static);
         if (_get_wire_height_and_voltage_info == null || _OCS_object_info == null || OCSActivationInfo == null || OCSDeactivationInfo == null)
         {
-            Main.log("Unable to retreive OCS class information; overhead power will be unavailable");
+            Main.release_log("Unable to retreive OCS class information; overhead power will be unavailable");
             _OCS_type = null;
             return;
         }
@@ -146,7 +146,7 @@ internal class pantograph_sim_controller: ASimInitializedController, electric_co
             Main.log($"Connection to OCS successfully established for car {_unit!.name}");
         else
         { 
-            Debug.LogError($"Unable to connect car {_unit!.name} to OCS, pantograph will not receive power", this); 
+            Main.release_log($"Unable to connect car {_unit!.name} to OCS, pantograph will not receive power"); 
             disable_power();
         }
     }

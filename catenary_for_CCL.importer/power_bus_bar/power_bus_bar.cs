@@ -73,7 +73,7 @@ internal class power_bus_bar: SimComponent
 
         if (_nominal_voltage <= 0.0f)
         { 
-            Main.log("Bus bar nominal voltage negative or zero, overhead power will not be collected"); 
+            Main.release_log("Bus bar nominal voltage negative or zero, overhead power will not be collected"); 
             return;
         }
         int pantograph_count = definition.pantograph_count;
@@ -81,7 +81,7 @@ internal class power_bus_bar: SimComponent
             || definition.pantograph_in_contact.Length != pantograph_count
             || definition.pantograph_in_contact.Length != definition.pantograph_voltage.Length)
         { 
-            Main.log("Bus bar has no or invalid number of inputs, overhead power will not be collected"); 
+            Main.release_log("Bus bar has no or invalid number of inputs, overhead power will not be collected"); 
             return;
         }
             
@@ -101,7 +101,7 @@ internal class power_bus_bar: SimComponent
         {
             Port? in_contact_port = _pantograph_in_contact[pantograph_index].GetPort();
             if (in_contact_port == null || !_pantograph_voltages[pantograph_index].IsConnected)
-                Main.log($"Empty pantograph connection {pantograph_index} to bus bar"); 
+                Main.release_log($"Empty pantograph connection {pantograph_index} to bus bar"); 
             else
             {
                 Action<float> contact_handler = create_contact_handler(pantograph_index);
