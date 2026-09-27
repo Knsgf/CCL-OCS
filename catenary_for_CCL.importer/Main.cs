@@ -21,7 +21,7 @@ public static class Main
     
     private static bool Load(UnityModManager.ModEntry mod)
     {
-        _mod = mod;
+        _mod              = mod;
         Harmony? injector = null;
 
         try
@@ -41,10 +41,10 @@ public static class Main
         return true;
     }
 
-    private static void Prefix(SimController __instance)
+    private static void Prefix(SimController? __instance)
     {
-        var all_controllers = __instance.GetComponentsInChildren<ASimInitializedController>();
-        if (all_controllers != null && (__instance.otherSimControllers == null 
+        var all_controllers = __instance?.GetComponentsInChildren<ASimInitializedController>();
+        if (all_controllers != null && (__instance!.otherSimControllers == null 
             || __instance.otherSimControllers.Length != all_controllers.Length))
         {
             __instance.otherSimControllers = all_controllers;
