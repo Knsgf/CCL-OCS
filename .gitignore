@@ -399,8 +399,6 @@ FodyWeavers.xsd
 .nfs*
 .editorconfig
 package.ps1
-README.md
-repository.json
 example-project/.*
 example-project/*.sln
 /example-project/Library
