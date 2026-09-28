@@ -15,6 +15,7 @@ Note that there is no hard requirement to install [1500 V DC Catenary](https://g
 1. Download and install Unity editor 2019.4.4x,
 2. Create new project and set it up for CCL as outlined on [CCL wiki](https://github.com/derail-valley-modding/custom-car-loader/wiki),
 3. Install [CatenaryAddon.unitypackage](https://github.com/Knsgf/CCL-OCS/releases/download/v1.0.0/CatenaryAddon.unitypackage) on top of CCL to add electric vehicle components. These are found in the "Catenary Addon" category,
-4. Refer to the [wiki](https://github.com/Knsgf/CCL-OCS/wiki) for detailed description of addon components.
+4. Refer to the [wiki](https://github.com/Knsgf/CCL-OCS/wiki) for detailed description of addon components,
+5. When exporting a vehicle, make sure to add **CatenaryForCCL** to **Additional Dependencies** list.
 
 An example Unity project containing a minimally functional railcar with 2 pantgraphs can be downloaded [here](https://github.com/Knsgf/CCL-OCS/releases/download/v1.0.0/example-railcar.zip). The relevant components are found in "pantograph", "pantograph2", "busBar" and "electricityMeter" inside the \[sim\] section and \[Pantograph\]/\[Pantograph2\] which contain animation.
