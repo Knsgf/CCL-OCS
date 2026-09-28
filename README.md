@@ -1,6 +1,7 @@
 ### Description
 Thi framework allows Custom Car Loader (CCL) vehicles to collect power from overhead contact system (OCS) added by [1500 V DC Catenary](https://github.com/Knsgf/Derail_Valley_electric_concept/releases/) mod. Like any framework, this mod does nothing by itself.
-**NB!** Like the catenary mod itself, electric vehicles are **not compatible** with multiplayer.
+
+**NB!** Like the catenary mod, electric vehicles are **not compatible** with multiplayer.
 
 ### User installation
 1. Install [Unity Mod Manager](https://www.nexusmods.com/site/mods/21) (UMM),
