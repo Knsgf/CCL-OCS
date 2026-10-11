@@ -193,6 +193,7 @@ public class electricity_meter: SimComponent
             {
                 meter._scheduled_tracker           = standard_tracker;
                 meter._ownership_check_frames_left = 3;
+                break;
             }
         }
     }
