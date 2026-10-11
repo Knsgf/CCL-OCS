@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Newtonsoft.Json.Linq;
@@ -61,15 +62,21 @@ public class electricity_meter: SimComponent
     private static readonly Dictionary<TrainCar, LocoDebtTrackerBase> _new_trackers     = [];
     private static readonly Dictionary<    LocoDebtTrackerBase, electricity_meter> _fee_trackers            = [];
     private static readonly Dictionary<SimulatedCarDebtTracker,             float> _initial_electric_charge = [];
+
+	const string ownership_controller_type_name = "LocoOwnership.OwnershipHandler.LocoOwnershipController, LocoOwnership";
+    private static Type? _ownership_controller_type         = null;
+    private static bool  _ownership_controller_type_queried = false;
         
     private readonly TrainCar?     _unit;
     private readonly Port          _electric_charge_consumed;
     private readonly PortReference _supply_voltage, _current_draw;
 
-    private LocoDebtTrackerBase? _fee_tracker;
+    private LocoDebtTrackerBase?     _fee_tracker;
+    private SimulatedCarDebtTracker? _scheduled_tracker = null;
 
     private float  _energy_consumption_factor;
     private double _energy_consumed = 0.0;
+    private int    _ownership_check_frames_left;
 
     public static Dictionary<SimulatedCarDebtTracker,             float> initial_electric_charge => _initial_electric_charge;
     public static Dictionary<    LocoDebtTrackerBase, electricity_meter> fee_trackers            => _fee_trackers;
@@ -115,13 +122,25 @@ public class electricity_meter: SimComponent
         }
     }
 
+    private static bool is_vehicle_private(TrainCar vehicle)
+    {
+        if (vehicle.uniqueCar)
+            return true;
+        if (!_ownership_controller_type_queried)
+        {
+            _ownership_controller_type_queried = true;
+            _ownership_controller_type         = Type.GetType(ownership_controller_type_name, throwOnError: false);
+        }
+        return _ownership_controller_type != null && vehicle.gameObject.GetComponent(_ownership_controller_type) != null;
+    }
+
     internal static void assign_new_tracker(TrainCar vehicle, SimulatedCarDebtTracker? standard_tracker)
     {
         if (vehicle.playerSpawnedCar)
             return;
 
         bool tracker_assigned;
-        if (vehicle.uniqueCar)
+        if (is_vehicle_private(vehicle))
         {
             _new_trackers[vehicle] = new private_vehicle_meter(vehicle);
             SingletonBehaviour<LocoDebtController>.Instance.RegisterLocoDebtTracker(vehicle, _new_trackers[vehicle]);
@@ -144,21 +163,36 @@ public class electricity_meter: SimComponent
         electricity_meter? meter = null;
         foreach (KeyValuePair<LocoDebtTrackerBase, electricity_meter> current_tracker in _fee_trackers)
         {
-            meter = current_tracker.Value;
-            unit  = meter._unit;
-            if (unit == vehicle && (current_tracker.Key is private_vehicle_meter) != unit.uniqueCar)
+            meter           = current_tracker.Value;
+            unit            = meter._unit;
+            bool is_private = is_vehicle_private(vehicle);
+            if (unit == vehicle && (current_tracker.Key is private_vehicle_meter) != is_private)
             {
                 meter.dispose_fee_tracker(unit);
-                if (!unit.uniqueCar)
+                if (!is_private)
                     meter.Reset();      // Any leftover electricity bill on a privately owned vehicle is staged and documented by the dispose call above
-                if (unit.uniqueCar || standard_tracker != null)
+                if (is_private || standard_tracker != null)
                 {
-                    Main.log($"Re-registering fee tracker for {(unit.uniqueCar ? "private" : "DVRT")} vehicle {unit.ID}");
+                    Main.log($"Re-registering fee tracker for {(is_private ? "private" : "DVRT")} vehicle {unit.ID}");
                     _cars_with_meters[unit] = meter;
                     unit.OnDestroyCar      += meter.dispose_fee_tracker;
                     assign_new_tracker(unit, standard_tracker);
                 }
                 break;
+            }
+        }
+    }
+
+    public static void schedule_ownership_check(TrainCar vehicle, SimulatedCarDebtTracker? standard_tracker)
+    {
+        if (standard_tracker == null)
+            return;
+        foreach (electricity_meter meter in _fee_trackers.Values)
+        {
+            if (meter._unit == vehicle)
+            {
+                meter._scheduled_tracker           = standard_tracker;
+                meter._ownership_check_frames_left = 3;
             }
         }
     }
@@ -199,6 +233,16 @@ public class electricity_meter: SimComponent
 
     public override void Tick(float delta)
     {
+        if (_scheduled_tracker != null && _unit != null)
+        {
+            if (_ownership_check_frames_left > 0)
+                --_ownership_check_frames_left;
+            else
+            {
+                replace_tracker_on_ownership_change(_unit, _scheduled_tracker);
+                _scheduled_tracker = null;
+            }
+        }
         if (_fee_tracker != null)
         { 
             float load    = _current_draw.Value;

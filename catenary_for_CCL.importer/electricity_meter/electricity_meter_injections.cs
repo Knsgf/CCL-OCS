@@ -29,7 +29,7 @@ internal static class company_vehicle_registar
     private static void Postfix(TrainCar? car, LocoDebtTrackerBase? locoDebtTracker)
     {
         if (car != null)
-            electricity_meter.replace_tracker_on_ownership_change(car, locoDebtTracker as SimulatedCarDebtTracker); 
+            electricity_meter.schedule_ownership_check(car, locoDebtTracker as SimulatedCarDebtTracker); 
     }
 }
 
