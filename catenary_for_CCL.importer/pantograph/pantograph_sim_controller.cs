@@ -66,7 +66,7 @@ internal class pantograph_sim_controller: ASimInitializedController, electric_co
     {
         if (_OCS_type != null)
             return;
-        _OCS_type = Type.GetType(OCS_class_name, false);
+        _OCS_type = Type.GetType(OCS_class_name, throwOnError: false);
         if (_OCS_type == null)
         {
             Main.release_log("Catenary not installed; overhead power will be unavailable");
@@ -75,16 +75,16 @@ internal class pantograph_sim_controller: ASimInitializedController, electric_co
         _get_wire_height_and_voltage_info = _OCS_type.GetMethod(OCS_wire_height_and_voltage_method_name, 
             [typeof(Transform), typeof(Transform), typeof(Transform), typeof(Transform), typeof(float)]);
         _OCS_object_info = _OCS_type.GetProperty(OCS_property_name, BindingFlags.Public | BindingFlags.Static);
-        EventInfo? OCSActivationInfo   = _OCS_type.GetEvent(  OCS_activation_event_name, BindingFlags.Public | BindingFlags.Static);
-        EventInfo? OCSDeactivationInfo = _OCS_type.GetEvent(OCS_deactivation_event_name, BindingFlags.Public | BindingFlags.Static);
-        if (_get_wire_height_and_voltage_info == null || _OCS_object_info == null || OCSActivationInfo == null || OCSDeactivationInfo == null)
+        EventInfo? OCS_activation_info   = _OCS_type.GetEvent(  OCS_activation_event_name, BindingFlags.Public | BindingFlags.Static);
+        EventInfo? OCS_deactivation_info = _OCS_type.GetEvent(OCS_deactivation_event_name, BindingFlags.Public | BindingFlags.Static);
+        if (_get_wire_height_and_voltage_info == null || _OCS_object_info == null || OCS_activation_info == null || OCS_deactivation_info == null)
         {
             Main.release_log("Unable to retreive OCS class information; overhead power will be unavailable");
             _OCS_type = null;
             return;
         }
-        OCSActivationInfo.AddEventHandler  (null, set_up_connection_for_all_controllers);
-        OCSDeactivationInfo.AddEventHandler(null,  sever_connection_for_all_controllers);
+        OCS_activation_info.AddEventHandler  (null, set_up_connection_for_all_controllers);
+        OCS_deactivation_info.AddEventHandler(null,  sever_connection_for_all_controllers);
         set_up_connection_for_all_controllers();
     }
 

@@ -25,6 +25,12 @@ internal static class port_accessor
 
 internal class power_bus_bar: SimComponent
 {
+    private const string OCS_settings_class_name       = "electric_sim.catenary_editor.editor_settings, electric_sim";
+    private const string OCS_power_cheat_property_name = "infinite_power";
+    private const string OCS_power_cheat_event_name    = "power_cheat_toggle";
+
+    private static Type? _OCS_setting_type    = null;
+    private static bool  _power_cheat_enabled = false;
     
     private readonly float _nominal_voltage;
 
@@ -40,6 +46,23 @@ internal class power_bus_bar: SimComponent
     private readonly bool[] _pantograph_raised = [];
 
     private int _raised_pantographs_count = 0;
+
+    private static void try_get_OCS_settings()
+    {
+        if (_OCS_setting_type != null)
+            return;
+        _OCS_setting_type = Type.GetType(OCS_settings_class_name, throwOnError: false);
+        if (_OCS_setting_type != null)
+        {
+            PropertyInfo power_cheat_info = _OCS_setting_type.GetProperty(OCS_power_cheat_property_name, 
+                BindingFlags.Public | BindingFlags.Static);
+            Debug.Log($"PBB {power_cheat_info?.GetValue(null)?.ToString() ?? "<null>"}");
+            _power_cheat_enabled = (bool) (power_cheat_info?.GetValue(null) ?? false);
+            EventInfo? OCS_power_cheat_event_info = _OCS_setting_type.GetEvent(OCS_power_cheat_event_name, BindingFlags.Public | BindingFlags.Static);
+            OCS_power_cheat_event_info?.AddEventHandler(null, 
+                (Action<bool>) ((bool cheat_enabled) => _power_cheat_enabled = cheat_enabled));
+        }
+    }
 
     private Action<float> create_contact_handler(int pantograph_index)
     {
@@ -61,8 +84,10 @@ internal class power_bus_bar: SimComponent
         };
     }
 
-    public power_bus_bar(power_bus_bar_definition definition) : base(definition.ID)
+    public power_bus_bar(power_bus_bar_definition definition): base(definition.ID)
     {
+        try_get_OCS_settings();
+        
         _nominal_voltage = definition.nominal_voltage;
             
         _supply_voltage            = AddPort(definition.supply_voltage           );
@@ -113,6 +138,14 @@ internal class power_bus_bar: SimComponent
 
     public override void Tick(float delta)
     {
+        if (_power_cheat_enabled)
+        {
+            _supply_voltage.Value            = _nominal_voltage;
+            _supply_voltage_normalised.Value = 1.0f;
+            _pantograph_input_current.Value  = 0.0f;
+            return;
+        }
+
         if (_raised_pantographs_count == 0)
             _supply_voltage.Value = _supply_voltage_normalised.Value = _pantograph_input_current.Value = 0.0f;
         else
