@@ -77,6 +77,7 @@ public class electricity_meter: SimComponent
     private float  _energy_consumption_factor;
     private double _energy_consumed = 0.0;
     private int    _ownership_check_frames_left;
+    private string _vehicle_ID = "";
 
     public static Dictionary<SimulatedCarDebtTracker,             float> initial_electric_charge => _initial_electric_charge;
     public static Dictionary<    LocoDebtTrackerBase, electricity_meter> fee_trackers            => _fee_trackers;
@@ -119,6 +120,7 @@ public class electricity_meter: SimComponent
         {
             _unit.LogicCarInitialized  -= adjust_energy_consumption_factor;
             _energy_consumption_factor *= gameParams.ResourceConsumptionModifier;
+            _vehicle_ID                 = _unit.ID;
         }
     }
 
@@ -173,7 +175,7 @@ public class electricity_meter: SimComponent
                     meter.Reset();      // Any leftover electricity bill on a privately owned vehicle is staged and documented by the dispose call above
                 if (is_private || standard_tracker != null)
                 {
-                    Main.log($"Re-registering fee tracker for {(is_private ? "private" : "DVRT")} vehicle {unit.ID}");
+                    Main.log($"Re-registering fee tracker for {(is_private ? "private" : "DVRT")} vehicle {meter._vehicle_ID}");
                     _cars_with_meters[unit] = meter;
                     unit.OnDestroyCar      += meter.dispose_fee_tracker;
                     assign_new_tracker(unit, standard_tracker);
@@ -205,7 +207,7 @@ public class electricity_meter: SimComponent
             _fee_trackers[_fee_tracker] = this;
             _new_trackers.Remove(_unit);
             _fee_tracker.UpdateDebtValues();
-            Main.log($"Set up a fee tracker <{_fee_tracker.GetType()}> for car {_unit.ID}");
+            Main.log($"Set up a fee tracker <{_fee_tracker.GetType()}> for car {_vehicle_ID}");
         }
     }
 
@@ -223,13 +225,13 @@ public class electricity_meter: SimComponent
             else if (_fee_tracker is private_vehicle_meter)
             { 
                 SingletonBehaviour<LocoDebtController>.Instance.StageLocoDebtOnLocoDestroy(_fee_tracker);
-                Main.log($"Staged remaining electricity fees on car {unit.ID}");
+                Main.log($"Staged remaining electricity fees on car {_vehicle_ID}");
             }
             _fee_tracker = null;
+            Main.log($"Removed fee tracker for car {_vehicle_ID}");
         }
         _cars_with_meters.Remove(unit);
         _new_trackers.Remove    (unit); 
-        Main.log($"Removed fee tracker for car {unit.ID}");
     }
 
     public override void Tick(float delta)
