@@ -25,12 +25,15 @@ internal static class port_accessor
 
 internal class power_bus_bar: SimComponent
 {
-    private const string OCS_settings_class_name       = "electric_sim.catenary_editor.editor_settings, electric_sim";
-    private const string OCS_power_cheat_property_name = "infinite_power";
-    private const string OCS_power_cheat_event_name    = "power_cheat_toggle";
+    private const string OCS_settings_class_name            = "electric_sim.catenary_editor.editor_settings, electric_sim";
+    private const string OCS_power_cheat_property_name      = "omnipresent_power";
+    private const string OCS_power_cheat_event_name         = "omni_cheat_toggle";
+    private const string OCS_voltage_override_property_name = "voltage_cheat";
+    private const string OCS_voltage_override_event_name    = "voltage_cheat_toggle";
+    
 
     private static Type? _OCS_setting_type    = null;
-    private static bool  _power_cheat_enabled = false;
+    private static bool  _power_cheat_enabled = false, _voltage_override_enabled = false;
     
     private readonly float _nominal_voltage;
 
@@ -47,6 +50,15 @@ internal class power_bus_bar: SimComponent
 
     private int _raised_pantographs_count = 0;
 
+    private static bool set_up_toggle(Type OCS_setting_type, string property_name, string setter_event_name, Action<bool> setter)
+    {
+        PropertyInfo setting_property_info = OCS_setting_type.GetProperty(property_name, BindingFlags.Public | BindingFlags.Static);
+        bool setting = (bool) (setting_property_info?.GetValue(null) ?? false);
+        EventInfo? setting_event_info = OCS_setting_type.GetEvent(setter_event_name, BindingFlags.Public | BindingFlags.Static);
+        setting_event_info?.AddEventHandler(null, setter);
+        return setting;
+    }
+    
     private static void try_get_OCS_settings()
     {
         if (_OCS_setting_type != null)
@@ -54,13 +66,10 @@ internal class power_bus_bar: SimComponent
         _OCS_setting_type = Type.GetType(OCS_settings_class_name, throwOnError: false);
         if (_OCS_setting_type != null)
         {
-            PropertyInfo power_cheat_info = _OCS_setting_type.GetProperty(OCS_power_cheat_property_name, 
-                BindingFlags.Public | BindingFlags.Static);
-            Debug.Log($"PBB {power_cheat_info?.GetValue(null)?.ToString() ?? "<null>"}");
-            _power_cheat_enabled = (bool) (power_cheat_info?.GetValue(null) ?? false);
-            EventInfo? OCS_power_cheat_event_info = _OCS_setting_type.GetEvent(OCS_power_cheat_event_name, BindingFlags.Public | BindingFlags.Static);
-            OCS_power_cheat_event_info?.AddEventHandler(null, 
-                (Action<bool>) ((bool cheat_enabled) => _power_cheat_enabled = cheat_enabled));
+            _power_cheat_enabled      = set_up_toggle(_OCS_setting_type,     OCS_power_cheat_property_name,  OCS_power_cheat_event_name, 
+                (bool cheat_enabled) => _power_cheat_enabled      = cheat_enabled);
+            _voltage_override_enabled = set_up_toggle(_OCS_setting_type, OCS_voltage_override_property_name, OCS_voltage_override_event_name, 
+                (bool cheat_enabled) => _voltage_override_enabled = cheat_enabled);
         }
     }
 
@@ -72,13 +81,9 @@ internal class power_bus_bar: SimComponent
             if (_pantograph_raised[pantograph_index] != now_in_contact)
             {
                 if (now_in_contact)
-                {
                     _raised_count.Value = ++_raised_pantographs_count;
-                }
                 else
-                { 
                     _raised_count.Value = --_raised_pantographs_count; 
-                }
             }
             _pantograph_raised[pantograph_index] = now_in_contact;
         };
@@ -153,8 +158,12 @@ internal class power_bus_bar: SimComponent
             float voltage = 0.0f;
             for (int pantograph_index = 0; pantograph_index < _pantograph_voltages.Length; ++pantograph_index)
             {
-                if (_pantograph_raised![pantograph_index])
-                    voltage = Mathf.Max(voltage, _pantograph_voltages[pantograph_index].Value); 
+                if (_pantograph_raised[pantograph_index])
+                {
+                    voltage = _voltage_override_enabled 
+                            ? _nominal_voltage 
+                            : Mathf.Max(voltage, _pantograph_voltages[pantograph_index].Value);
+                }
             }
             _supply_voltage.Value            = voltage;
             _supply_voltage_normalised.Value = voltage             / _nominal_voltage;
